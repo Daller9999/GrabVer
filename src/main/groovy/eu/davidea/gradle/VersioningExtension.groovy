@@ -55,7 +55,7 @@ class VersioningExtension {
             if (!grabver.readUserConfiguration()) {
                 return
             }
-            String version = "version: ${bold("${major}.${minor}${patch < 0 ? "" : ".${patch}"}${patchAuto < 0 ? "" : ".${patchAuto}"}${isPreRelease() ? "-${preRelease}" : ""}")}"
+            String version = "version: ${bold("${major}.${minor}${patch < 0 ? "" : ".${patch}"}.${patchAuto < 0 ? "" : ".${patchAuto}"}${isPreRelease() ? "-${preRelease}" : ""}")}"
             String tasks = (incrementOn != null ? ", incrementOn: ${bold(incrementOn)}" : "") + (saveOn != null ? ", saveOn: ${bold(saveOn)}" : "")
             println("INFO - Evaluating user values: {${version}${tasks}}")
             // Auto reset Patch in case they differ or preRelease is set
