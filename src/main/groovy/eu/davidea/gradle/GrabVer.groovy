@@ -184,6 +184,7 @@ class GrabVer implements Plugin<Project> {
         versionProps.setProperty(VersionType.MAJOR.toString(), String.valueOf(versioning.major))
         versionProps.setProperty(VersionType.MINOR.toString(), String.valueOf(versioning.minor))
         versionProps.setProperty(VersionType.PATCH.toString(), String.valueOf(versioning.patch))
+        versionProps.setProperty(VersionType.PATCH_AUTO.toString(), String.valueOf(versioning.patchAuto))
         versionProps.setProperty(VersionType.PRE_RELEASE.toString(), versioning.preRelease != null ? versioning.preRelease : "")
         versionProps.setProperty(VersionType.BUILD.toString(), String.valueOf(versioning.build))
         versionProps.setProperty(VersionType.CODE.toString(), String.valueOf(versioning.code))

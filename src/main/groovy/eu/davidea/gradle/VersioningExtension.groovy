@@ -29,6 +29,7 @@ class VersioningExtension {
     int major = 1
     int minor
     int patch = -1
+    int patchAuto = -1
     String preRelease
     String incrementOn
     String saveOn
@@ -37,6 +38,7 @@ class VersioningExtension {
     private int propMajor
     private int propMinor
     private int propPatch
+    private int propPatchAuto
     private int build
     private int code
     // Only GrabVer can access these properties
@@ -53,7 +55,7 @@ class VersioningExtension {
             if (!grabver.readUserConfiguration()) {
                 return
             }
-            String version = "version: ${bold("${major}.${minor}${patch < 0 ? "" : ".${patch}"}${isPreRelease() ? "-${preRelease}" : ""}")}"
+            String version = "version: ${bold("${major}.${minor}${patch < 0 ? "" : ".${patch}"}${patchAuto < 0 ? "" : ".${patchAuto}"}${isPreRelease() ? "-${preRelease}" : ""}")}"
             String tasks = (incrementOn != null ? ", incrementOn: ${bold(incrementOn)}" : "") + (saveOn != null ? ", saveOn: ${bold(saveOn)}" : "")
             println("INFO - Evaluating user values: {${version}${tasks}}")
             // Auto reset Patch in case they differ or preRelease is set
@@ -93,6 +95,7 @@ class VersioningExtension {
         propMajor = Integer.valueOf(versionProps.getProperty(VersionType.MAJOR.toString(), "1"))
         propMinor = Integer.valueOf(versionProps.getProperty(VersionType.MINOR.toString(), "0"))
         propPatch = Integer.valueOf(versionProps.getProperty(VersionType.PATCH.toString(), "0"))
+        propPatchAuto = Integer.valueOf(versionProps.getProperty(VersionType.PATCH_AUTO.toString(), "0"))
         propPreRelease = versionProps.getProperty(VersionType.PRE_RELEASE.toString(), "")
         build = Integer.valueOf(versionProps.getProperty(VersionType.BUILD.toString(), "0"))
         code = Integer.valueOf(versionProps.getProperty(VersionType.CODE.toString(), "1"))
@@ -122,6 +125,11 @@ class VersioningExtension {
         return patch < 0 ? propPatch : patch
     }
 
+    int getPatchAuto() {
+        evaluateVersion()
+        return patchAuto < 0 ? propPatchAuto : patchAuto
+    }
+
     int getBuild() {
         evaluateVersion()
         return build
@@ -137,7 +145,7 @@ class VersioningExtension {
      */
     String getName() {
         evaluateVersion()
-        return (major + "." + minor + "." + (patch < 0 ? propPatch : patch) + (isPreRelease() ? "-" + preRelease : ""))
+        return (major + "." + minor + "." + (patch < 0 ? propPatch : patch) + "." + (patchAuto < 0 ? propPatchAuto : patchAuto) + (isPreRelease() ? "-" + preRelease : ""))
     }
 
     /**
@@ -161,7 +169,7 @@ class VersioningExtension {
     }
 
     String toStringCurrent() {
-        return propMajor + "." + propMinor + "." + propPatch +
+        return propMajor + "." + propMinor + "." + propPatch + "." + propPatchAuto +
                 (propPreRelease != null && !propPreRelease.isEmpty() ? "-" + propPreRelease : "") +
                 " #" + build +
                 " code=" + code
@@ -169,6 +177,7 @@ class VersioningExtension {
 
     String toString() {
         return major + "." + minor + "." + (patch < 0 ? propPatch : patch) +
+                "." + (patchAuto < 0 ? propPatchAuto : patchAuto) +
                 (isPreRelease() ? "-" + preRelease : "") +
                 " #" + build +
                 " code=" + code
