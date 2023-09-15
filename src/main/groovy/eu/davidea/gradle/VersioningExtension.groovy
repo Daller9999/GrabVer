@@ -71,11 +71,18 @@ class VersioningExtension {
                 if (patch < 0) {
                     grabver.printDebug("Auto resetting patch version")
                     patch = 0
+                    patchAuto = 0
                 }
             } else if (isRelease && patch < 0) {
                 grabver.printDebug("Auto incrementing patch version")
                 // Auto-increment Patch if Major or Minor do not differ from user
                 patch = propPatch + 1
+            }
+            String alias = System.getenv("ALIAS")
+            String link = System.getenv("CONFIG_URL")
+            String type = System.getenv("TYPE")
+            if (alias != null || link != null || type != null) {
+                patchAuto = propPatchAuto + 1
             }
             // Always auto-increment build number
             grabver.printDebug("Auto incrementing build number")
